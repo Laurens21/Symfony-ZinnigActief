@@ -1,0 +1,13 @@
+# config/packages/fos_user.yaml
+fos_user:
+    db_driver: orm # other valid values are 'mongodb' and 'couchdb'
+    firewall_name: main
+    user_class: App\Entity\User
+    from_email:
+        address: "test@domain.com"
+        sender_name: "test@domain.com"
+    registration:
+        form:
+            type: App\Form\RegisterType
+            # if you are using Symfony < 2.8 you should use the type name instead
+            # type: app_user_registration
