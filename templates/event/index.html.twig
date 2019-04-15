@@ -16,7 +16,9 @@
                 <th>Max</th>
                 <th>Description</th>
                 <th>Image</th>
+                {% if is_granted('ROLE_AMIN') or is_granted('ROLE_LEADER') %}
                 <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -30,10 +32,12 @@
                 <td>{{ event.max }}</td>
                 <td>{{ event.description }}</td>
                 <td>{{ event.image }}</td>
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_LEADER') %}
                 <td>
                     <a class="btn btn-primary" href="{{ path('event_show', {'id': event.id}) }}">show</a>
                     <a class="btn btn-secondary" href="{{ path('event_edit', {'id': event.id}) }}">edit</a>
                 </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
@@ -42,6 +46,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_LEADER') %}
     <a class="btn btn-primary" href="{{ path('event_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

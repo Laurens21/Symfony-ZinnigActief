@@ -12,7 +12,7 @@
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
-<header>
+<header style="margin-bottom: 20px">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -20,60 +20,49 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             {% if is_granted('ROLE_ADMIN') %}
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item ">
                     <a class="nav-link" href="{{ path('default') }}">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('event_index') }}">Events</a>
+                    <a class="nav-link text-white" href="{{ path('event_index') }}">Events</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('location_index') }}">Locations</a>
+                    <a class="nav-link text-white" href="{{ path('location_index') }}">Locations</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('registration_index') }}">Registrations</a>
+                    <a class="nav-link text-white" href="{{ path('registration_index') }}">Registrations</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('user_index') }}">Users</a>
+                    <a class="nav-link text-white" href="{{ path('user_index') }}">Users</a>
                 </li>
             </ul>
-            {% endif %}
-            {% if is_granted('ROLE_LEADER') %}
+            {% elseif is_granted('ROLE_LEADER') or is_granted('ROLE_STUDENT') %}
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ path('default') }}">Home <span class="sr-only">(current)</span></a>
+                <li class="nav-item ">
+                    <a class="nav-link text-white" href="{{ path('default') }}">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('event_index') }}">Events</a>
+                    <a class="nav-link text-white" href="{{ path('event_index') }}">Events</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('location_index') }}">Locations</a>
+                    <a class="nav-link text-white" href="{{ path('location_index') }}">Locations</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ path('registration_index') }}">Registrations</a>
+                    <a class="nav-link text-white" href="{{ path('registration_index') }}">Registrations</a>
                 </li>
             </ul>
-            {% endif %}
-            {% if is_granted('ROLE_STUDENT') %}
+            {% else %}
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ path('default') }}">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('event_index') }}">Events</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('location_index') }}">Locations</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ path('registration_index') }}">Registrations</a>
+                <li class="nav-item ">
+                    <a class="nav-link text-white" href="{{ path('default') }}">Home <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
             {% endif %}
             <div class="navbar navbar-inverse" role="navigation">
-                    <div class="blockMain">
+                    <div class="blockMain ">
                           {% if app.user %}
                               {% set mainMenu = [
-                                  {'path': 'fos_user_security_logout','name': 'Logout'}
+                                  {'path': 'fos_user_security_logout', 'name' : 'Logout'}
                               ] %}          
                           {% else %}
                               {% set mainMenu = [
@@ -82,10 +71,11 @@
                               ] %}          
                           {% endif %}
                       <div class="navbar-collapse collapse">
+                            <a class="nav-link text-white">{{ app.user }}</a>
                         <ul class="nav navbar-nav">
                           {% for item in mainMenu %}
                             <li class="nav-item"{{ app.request.get('_route') == item['path'] ? ' class="active"' : '' }}>
-                              <a class="nav-link" href="{{ path(item['path']) }}">{{ item['name'] }}</a>
+                                <a class="nav-link text-white" href="{{ path(item['path']) }}">{{ item['name'] }}</a>
                             </li>
                           {% endfor %}
                         </ul>
@@ -95,10 +85,12 @@
         </div>
     </nav>
 </header>
-{% block fos_user_content %} {% endblock %}
+<div class="container">{% block fos_user_content %} {% endblock %}</div>
 <div class="container">{% block body %}{% endblock %}</div>
 <!-- FOOTER -->
-
+<footer class="bg-dark" style="padding: 20px 0px; position: absolute; bottom: 0; width: 100%">
+    <br>
+</footer>
 </main>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

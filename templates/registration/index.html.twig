@@ -12,7 +12,9 @@
                 <th>Event</th>
                 <th>User</th>
                 <th>Location</th>
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_LEADER') %}
                 <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -22,10 +24,12 @@
                 <td>{{ registration.event }}</td>
                 <td>{{ registration.user }}</td>
                 <td>{{ registration.location }}</td>
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_LEADER') %}
                 <td>
                     <a class="btn btn-primary" href="{{ path('registration_show', {'id': registration.id}) }}">show</a>
                     <a class="btn btn-secondary" href="{{ path('registration_edit', {'id': registration.id}) }}">edit</a>
                 </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
@@ -34,6 +38,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_LEADER') %}
     <a class="btn btn-primary" href="{{ path('registration_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

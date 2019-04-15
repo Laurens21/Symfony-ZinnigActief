@@ -9,20 +9,32 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/registration")
  */
 class RegistrationController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     /**
      * @Route("/", name="registration_index", methods={"GET"})
      */
     public function index(RegistrationRepository $registrationRepository): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER') || $this->security->isGranted('ROLE_STUDENT')){
         return $this->render('registration/index.html.twig', [
             'registrations' => $registrationRepository->findAll(),
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -30,6 +42,7 @@ class RegistrationController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER')){
         $registration = new Registration();
         $form = $this->createForm(RegistrationType::class, $registration);
         $form->handleRequest($request);
@@ -46,6 +59,9 @@ class RegistrationController extends AbstractController
             'registration' => $registration,
             'form' => $form->createView(),
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -53,9 +69,13 @@ class RegistrationController extends AbstractController
      */
     public function show(Registration $registration): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER') || $this->security->isGranted('ROLE_STUDENT')){
         return $this->render('registration/show.html.twig', [
             'registration' => $registration,
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -63,6 +83,7 @@ class RegistrationController extends AbstractController
      */
     public function edit(Request $request, Registration $registration): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER')){
         $form = $this->createForm(RegistrationType::class, $registration);
         $form->handleRequest($request);
 
@@ -78,6 +99,9 @@ class RegistrationController extends AbstractController
             'registration' => $registration,
             'form' => $form->createView(),
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -85,6 +109,7 @@ class RegistrationController extends AbstractController
      */
     public function delete(Request $request, Registration $registration): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER')){
         if ($this->isCsrfTokenValid('delete'.$registration->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($registration);
@@ -92,5 +117,8 @@ class RegistrationController extends AbstractController
         }
 
         return $this->redirectToRoute('registration_index');
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 }

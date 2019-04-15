@@ -13,7 +13,9 @@
                 <th>Latitude</th>
                 <th>Longitude</th>
                 <th>Image</th>
+                {% if is_granted('ROLE_ADMIN') %}
                 <th>actions</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -24,10 +26,12 @@
                 <td>{{ location.latitude }}</td>
                 <td>{{ location.Longitude }}</td>
                 <td>{{ location.image }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
                 <td>
                     <a class="btn btn-primary" href="{{ path('location_show', {'id': location.id}) }}">show</a>
                     <a class="btn btn-secondary" href="{{ path('location_edit', {'id': location.id}) }}">edit</a>
                 </td>
+                {% endif %}
             </tr>
         {% else %}
             <tr>
@@ -36,6 +40,7 @@
         {% endfor %}
         </tbody>
     </table>
-
+    {% if is_granted('ROLE_ADMIN') %}
     <a class="btn btn-primary" href="{{ path('location_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}

@@ -9,20 +9,32 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/location")
  */
 class LocationController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+
     /**
      * @Route("/", name="location_index", methods={"GET"})
      */
     public function index(LocationRepository $locationRepository): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER') || $this->security->isGranted('ROLE_STUDENT')){
         return $this->render('location/index.html.twig', [
             'locations' => $locationRepository->findAll(),
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -30,6 +42,7 @@ class LocationController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN')){
         $location = new Location();
         $form = $this->createForm(LocationType::class, $location);
         $form->handleRequest($request);
@@ -46,6 +59,9 @@ class LocationController extends AbstractController
             'location' => $location,
             'form' => $form->createView(),
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -53,9 +69,13 @@ class LocationController extends AbstractController
      */
     public function show(Location $location): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER') || $this->security->isGranted('ROLE_STUDENT')){
         return $this->render('location/show.html.twig', [
             'location' => $location,
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -63,6 +83,8 @@ class LocationController extends AbstractController
      */
     public function edit(Request $request, Location $location): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN')){
+
         $form = $this->createForm(LocationType::class, $location);
         $form->handleRequest($request);
 
@@ -78,6 +100,9 @@ class LocationController extends AbstractController
             'location' => $location,
             'form' => $form->createView(),
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -85,6 +110,7 @@ class LocationController extends AbstractController
      */
     public function delete(Request $request, Location $location): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN')){
         if ($this->isCsrfTokenValid('delete'.$location->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($location);
@@ -92,5 +118,8 @@ class LocationController extends AbstractController
         }
 
         return $this->redirectToRoute('location_index');
+        } else {
+        return $this->redirectToRoute('default');
+        }
     }
 }

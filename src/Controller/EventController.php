@@ -9,20 +9,34 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 /**
  * @Route("/event")
  */
 class EventController extends AbstractController
 {
+
+    private $security;
+
+    public function __construct(Security $security)
+    {
+     $this->security = $security;
+    }
+
     /**
      * @Route("/", name="event_index", methods={"GET"})
      */
     public function index(EventRepository $eventRepository): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER') || $this->security->isGranted('ROLE_STUDENT')){
+        
         return $this->render('event/index.html.twig', [
             'events' => $eventRepository->findAll(),
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -30,6 +44,8 @@ class EventController extends AbstractController
      */
     public function new(Request $request): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER')) {
+
         $event = new Event();
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
@@ -46,6 +62,9 @@ class EventController extends AbstractController
             'event' => $event,
             'form' => $form->createView(),
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -53,9 +72,13 @@ class EventController extends AbstractController
      */
     public function show(Event $event): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER') || $this->security->isGranted('ROLE_STUDENT')){
         return $this->render('event/show.html.twig', [
             'event' => $event,
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -63,6 +86,8 @@ class EventController extends AbstractController
      */
     public function edit(Request $request, Event $event): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER')) {
+
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
@@ -78,6 +103,9 @@ class EventController extends AbstractController
             'event' => $event,
             'form' => $form->createView(),
         ]);
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 
     /**
@@ -85,6 +113,8 @@ class EventController extends AbstractController
      */
     public function delete(Request $request, Event $event): Response
     {
+        if ($this->security->isGranted('ROLE_ADMIN') || $this->security->isGranted('ROLE_LEADER')) {
+        
         if ($this->isCsrfTokenValid('delete'.$event->getId(), $request->request->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($event);
@@ -92,5 +122,8 @@ class EventController extends AbstractController
         }
 
         return $this->redirectToRoute('event_index');
+        } else {
+            return $this->redirectToRoute('default');
+        }
     }
 }
