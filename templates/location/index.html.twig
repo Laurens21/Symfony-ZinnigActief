@@ -9,6 +9,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Name</th>
                 <th>Latitude</th>
                 <th>Longitude</th>
                 <th>Image</th>
@@ -19,6 +20,7 @@
         {% for location in locations %}
             <tr>
                 <td>{{ location.id }}</td>
+                <td>{{ location.name }}</td>
                 <td>{{ location.latitude }}</td>
                 <td>{{ location.Longitude }}</td>
                 <td>{{ location.image }}</td>

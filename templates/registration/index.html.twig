@@ -9,6 +9,9 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Event</th>
+                <th>User</th>
+                <th>Location</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -16,6 +19,9 @@
         {% for registration in registrations %}
             <tr>
                 <td>{{ registration.id }}</td>
+                <td>{{ registration.event }}</td>
+                <td>{{ registration.user }}</td>
+                <td>{{ registration.location }}</td>
                 <td>
                     <a class="btn btn-primary" href="{{ path('registration_show', {'id': registration.id}) }}">show</a>
                     <a class="btn btn-secondary" href="{{ path('registration_edit', {'id': registration.id}) }}">edit</a>
