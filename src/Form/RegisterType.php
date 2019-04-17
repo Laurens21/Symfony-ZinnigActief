@@ -5,7 +5,6 @@ namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class RegisterType extends AbstractType
 {
@@ -13,11 +12,7 @@ class RegisterType extends AbstractType
     {
         $builder->add('name');
         $builder->add('address');
-        $builder->add('residence', CKEditorType::class, array(
-            'config' => array(
-                'uiColor' => '#ffffff'
-            ),
-        ));
+        $builder->add('residence');
     }
 
     public function getParent()

@@ -6,6 +6,7 @@ use App\Entity\Event;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class EventType extends AbstractType
 {
@@ -17,7 +18,11 @@ class EventType extends AbstractType
             ->add('end')
             ->add('min')
             ->add('max')
-            ->add('description')
+            ->add('description', CKEditorType::class, array(
+                'config' => array(
+                    'uiColor' => '#ffffff'
+                ),
+            ))
             ->add('image')
         ;
     }
