@@ -16,7 +16,7 @@
                 <th>Max</th>
                 <th>Description</th>
                 <th>Image</th>
-                {% if is_granted('ROLE_AMIN') or is_granted('ROLE_LEADER') %}
+                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_LEADER') %}
                 <th>actions</th>
                 {% endif %}
             </tr>
