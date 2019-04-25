@@ -30,8 +30,8 @@
                 <td>{{ event.end ? event.end|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ event.min }}</td>
                 <td>{{ event.max }}</td>
-                <td>{{ event.description }}</td>
-                <td>{{ event.image }}</td>
+                <td>{{ event.description|raw }}</td>
+                <td><img src={{ vich_uploader_asset(event, 'imageFile') }} width="45px" height="45px"></td>
                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_LEADER') %}
                 <td>
                     <a class="btn btn-primary" href="{{ path('event_show', {'id': event.id}) }}">show</a>

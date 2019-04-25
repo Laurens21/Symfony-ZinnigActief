@@ -25,7 +25,7 @@
                 <td>{{ location.name }}</td>
                 <td>{{ location.latitude }}</td>
                 <td>{{ location.Longitude }}</td>
-                <td>{{ location.image }}</td>
+                <td><img src={{ vich_uploader_asset(location, 'imageFile') }} width="45px" height="45px"></td>
                 {% if is_granted('ROLE_ADMIN') %}
                 <td>
                     <a class="btn btn-primary" href="{{ path('location_show', {'id': location.id}) }}">show</a>

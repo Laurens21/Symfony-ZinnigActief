@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class EventType extends AbstractType
 {
@@ -20,10 +21,15 @@ class EventType extends AbstractType
             ->add('max')
             ->add('description', CKEditorType::class, array(
                 'config' => array(
-                    'uiColor' => '#ffffff'
+                    'uiColor'  => '#ffffff'
                 ),
             ))
-            ->add('image')
+            ->add ('imageFile', VichImageType::class, array(
+                'label'             => 'Picture (.jpg or .png)',
+                'download_link'     => false,
+                'allow_delete'      => false,
+                'image_uri'         => false,
+            ))
         ;
     }
 
